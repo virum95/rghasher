@@ -1,0 +1,4 @@
+/home/virum/CLionProjects/helloWorld/build/CMakeFiles/rebuild_cache.dir
+/home/virum/CLionProjects/helloWorld/build/CMakeFiles/edit_cache.dir
+/home/virum/CLionProjects/helloWorld/build/CMakeFiles/prog.dir
+/home/virum/CLionProjects/helloWorld/build/CMakeFiles/hash.dir

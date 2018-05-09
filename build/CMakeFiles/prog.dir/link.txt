@@ -1,0 +1,1 @@
+/usr/bin/cc  -fopenmp   CMakeFiles/prog.dir/src/prog.c.o  -o ../bin/prog  -L/home/virum/CLionProjects/helloWorld/lib/streebog -Wl,-rpath,/home/virum/CLionProjects/helloWorld/lib/streebog -rdynamic -lm -lhasher 

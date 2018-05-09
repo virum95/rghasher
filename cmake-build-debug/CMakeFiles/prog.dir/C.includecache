@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/virum/CLionProjects/rg32hash/src/prog.c
+getopt.h
+-
+stdio.h
+-
+stdlib.h
+-
+math.h
+-
+string.h
+-
+stdint.h
+-
+

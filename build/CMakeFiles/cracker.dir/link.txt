@@ -1,0 +1,1 @@
+/usr/bin/cc  -lm -fopenmp   CMakeFiles/cracker.dir/src/cracker-dict.c.o  -o ../bin/cracker -rdynamic 
