@@ -1,63 +1,95 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include <zconf.h>
-#include <wait.h>
 
-#define SIZE 16
+#define rg uint32_t // NO WARRANTY
+#define rgp(a) for(c=0;c<(a);c++)
+#define rgn w[c*13]^=s;u[16+c]^=s;
 
-unsigned long
-doHash(char *key) {
-
-       int pid, status;
-   // first we fork the process
-   if (pid = fork()) {
-       // pid != 0: this is the parent process (i.e. our process)
-       waitpid(pid, &status, 0); // wait for the child to exit
-   } else {
-       /* pid == 0: this is the child process. now let's load the
-          "ls" program into this process and run it */
-
-       const char executable[] = "./lib/rg32hash/bin/tinyrg32";
-
-       // load it. there are more exec__ functions, try 'man 3 exec'
-       // execl takes the arguments as parameters. execv takes them as an array
-       // this is execl though, so:
-       //      exec         argv[0]  argv[1] end
-       execl(executable, executable, key,    NULL);
-
-       /* exec does not return unless the program couldn't be started.
-          when the child process stops, the waitpid() above will return.
-       */
-
-
-   }
-   return status; // this is the parent process again.
-
+void rgf(rg *a, rg *b) {
+    rg m = 19, A[19], x, o = 13, c, y, r = 0;
+    rgp(12)
+        b[c + c % 3 * o] ^= a
+        [c + 1];
+    rgp(m)
+    {
+        r = (c + r) & 31;
+        y = c * 7;
+        x = a[y++ % m];
+        x ^= a[y % m] | ~a[(y + 1) % m];
+        A[c] = x
+                       >> r | x << (32 - r);
+    }
+    for (y = 39; y--; b[y + 1] = b[y])
+        a[y % m] = A[y % m] ^ A[(y + 1) % m] ^ A[(y
+                                                  + 4) % m];
+    *a ^= 1;
+    rgp(3)a[c + o] ^= b[c * o] = b[c * o + o];
 }
 
-
-uint32_t adler32(const void *buf, size_t buflength) {
-    const uint8_t *buffer = (const uint8_t *) buf;
-
-    uint32_t s1 = 1;
-    uint32_t s2 = 0;
-
-    for (size_t n = 0; n < buflength; n++)
+void rgl(rg *u, rg *w, char *v
+) {
+    rg s, q, c, x;
+    rgp(40)w[c] = u[c % 19] = 0;
+    for (;; rgf(u, w))
     {
-        s1 = (s1 + buffer[n]) % 65521;
-        s2 = (s2 + s1) % 65521;
+        rgp(3)
+        {
+            for (s = q = 0; q
+                            < 4;)
+            {
+                x = (uint32_t) *v++;
+                s |= (x ? 255 & x : 1) << 8 * q++;
+                if (!x)
+                {
+                    rgn;
+                    rgp(17)rgf(u, w);
+                    return;
+                }
+            }
+            rgn;
+        }
     }
-    return (s2 << 16) | s1;
+}
+
+rg rgi(rg *m, rg *b, rg *a) {
+    if (*a & 2)rgf(m, b);
+    return m[*a ^= 3];
+}
+
+/* Example of API usage, non-Golfed (also public domain) */
+
+void compute_hash(char * candidate, char * hash) {
+    uint32_t belt[40], mill[19], c, j, phase = 2;
+    char str[10];
+    /* Seed random number generator */
+    rgl(mill, belt, candidate);
+    /* Show in hex first 256 bits of PRNG */
+    for (c = 0; c < 8; c++)
+    {
+        j = rgi(mill, belt, &phase); /* Get number from PRNG */
+        /* This isn't needed for good numbers, but test vector
+         * compatibility needs an endian swap on little-endian
+         * (x86) machines */
+        j = (j << 24 |
+             (j & 0xff00) << 8 |
+             (j & 0xff0000) >> 8 |
+             j >> 24);
+        snprintf(str, sizeof(str), "%08x"
+                ""
+                "", j);
+        strcat(hash, str);
+    }
 }
 
 
 int main(int argc, char *argv[]) {
-    unsigned long hash;
+    char hash[65];
     if (argc == 2)
     {
-        printf("%s, %i\n", argv[1], strlen(argv[1]));
-        hash = doHash(argv[1]);
+//        printf("%s, %zu\n", argv[1], strlen(argv[1]));
+//        system(prog);
+        compute_hash(argv[1], hash);
         printf("%s", hash);
     }
     else
