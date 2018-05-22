@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/virum/CLionProjects/helloWorld/src/hash.c
+/home/gusy/apuntes/HPC/rghasher/src/hash.c
 stdio.h
 -
 string.h
 -
-openssl/md5.h
+stdint.h
 -
 
